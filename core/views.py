@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Sum
 from django.utils import timezone
 from datetime import timedelta
-from inventory.models import Product
+from inventory.models import Product, Category
 from livestock.models import Livestock
 from sales.models import Order
 from blog.models import Article
@@ -11,11 +11,13 @@ from services.models import Service
 from services.models import ServiceBooking
 
 def home(request):
+    inventory_category = Category.objects.order_by('?').first()
     recent_products = Product.objects.filter(is_available=True)[:6]
     recent_articles = Article.objects.filter(is_published=True)[:3]
     services = Service.objects.filter(is_available=True)[:4]
     
     context = {
+        'inventory_category' : inventory_category,
         'recent_products': recent_products,
         'recent_articles': recent_articles,
         'services': services,

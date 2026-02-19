@@ -4,7 +4,7 @@ from .models import Category, Product
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description']
+    list_display = ['name', 'description', 'image']
     search_fields = ['name']
     prepopulated_fields = {'slug': ['name']} if hasattr(Category, 'slug') else {}
     

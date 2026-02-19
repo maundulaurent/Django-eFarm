@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to CSHAMBA Farm! 🌱</h1>
+    <p class="lead">Your one-stop destination for fresh farm produce, quality livestock, and expert farming advice.</p>
+    <hr class="my-4">
+    <p>Explore our products, meet our animals, and learn from our farming blog.</p>
+    <a class="btn btn-success btn-lg" href="{% url 'product-list' %}" role="button">View Products</a>
+    <a class="btn btn-outline-success btn-lg" href="{% url 'article-list' %}" role="button">Read Blog</a>
+</div>
+{% endblock %}

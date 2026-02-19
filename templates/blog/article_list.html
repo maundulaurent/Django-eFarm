@@ -1,0 +1,883 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Farming Tips & Articles - CSHAMBA Farm Blog{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Blog Hero Section */
+    .blog-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-image: url('{% if blog_hero_image %}{{ blog_hero_image.url }}{% else %}https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80{% endif %}');
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: overlay;
+        padding: 80px 0;
+        margin-bottom: 50px;
+        color: white;
+        position: relative;
+    }
+    
+    .blog-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .blog-hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .blog-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    
+    .blog-hero p {
+        font-size: 1.2rem;
+        opacity: 0.95;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Featured Article */
+    .featured-article {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        margin-bottom: 50px;
+        transition: transform 0.3s;
+    }
+    
+    .featured-article:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .featured-article-img {
+        height: 400px;
+        object-fit: cover;
+        width: 100%;
+    }
+    
+    .featured-article-content {
+        padding: 40px;
+    }
+    
+    .featured-badge {
+        background: #28a745;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    /* Article Cards */
+    .article-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .article-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+    
+    .article-img-wrapper {
+        position: relative;
+        padding-top: 66.67%; /* 3:2 Aspect Ratio */
+        overflow: hidden;
+    }
+    
+    .article-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+    
+    .article-card:hover .article-img {
+        transform: scale(1.05);
+    }
+    
+    .article-category {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 2;
+    }
+    
+    .category-badge {
+        background: rgba(40, 167, 69, 0.9);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-decoration: none;
+        backdrop-filter: blur(5px);
+    }
+    
+    .category-badge:hover {
+        background: #28a745;
+        color: white;
+    }
+    
+    .article-content {
+        padding: 25px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .article-meta {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .author-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+    }
+    
+    .article-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+    
+    .article-title a {
+        color: #212529;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .article-title a:hover {
+        color: #28a745;
+    }
+    
+    .article-excerpt {
+        color: #6c757d;
+        margin-bottom: 20px;
+        line-height: 1.6;
+        flex-grow: 1;
+    }
+    
+    .article-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .read-more {
+        color: #28a745;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        transition: gap 0.3s;
+    }
+    
+    .read-more i {
+        transition: transform 0.3s;
+    }
+    
+    .read-more:hover {
+        color: #218838;
+    }
+    
+    .read-more:hover i {
+        transform: translateX(5px);
+    }
+    
+    .article-stats {
+        display: flex;
+        gap: 15px;
+        color: #adb5bd;
+        font-size: 0.9rem;
+    }
+    
+    .article-stats i {
+        margin-right: 5px;
+    }
+
+    /* Sidebar */
+    .sidebar-widget {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .widget-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e9ecef;
+        display: flex;
+        align-items: center;
+    }
+    
+    .widget-title i {
+        color: #28a745;
+        margin-right: 10px;
+    }
+    
+    /* Categories List */
+    .categories-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .categories-list li {
+        margin-bottom: 12px;
+    }
+    
+    .categories-list a {
+        color: #495057;
+        text-decoration: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        transition: color 0.3s;
+    }
+    
+    .categories-list a:hover {
+        color: #28a745;
+    }
+    
+    .categories-list .count {
+        background: #e9ecef;
+        padding: 2px 10px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    
+    /* Popular Posts */
+    .popular-post {
+        display: flex;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .popular-post:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+    
+    .popular-post-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        object-fit: cover;
+        margin-right: 15px;
+    }
+    
+    .popular-post-content {
+        flex: 1;
+    }
+    
+    .popular-post-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+    
+    .popular-post-title a {
+        color: #212529;
+        text-decoration: none;
+    }
+    
+    .popular-post-title a:hover {
+        color: #28a745;
+    }
+    
+    .popular-post-meta {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    
+    /* Newsletter */
+    .newsletter-form .form-control {
+        border-radius: 50px;
+        padding: 12px 20px;
+        border: 1px solid #dee2e6;
+        margin-bottom: 10px;
+    }
+    
+    .newsletter-form .btn {
+        border-radius: 50px;
+        padding: 12px;
+    }
+    
+    /* Search Box */
+    .search-box {
+        position: relative;
+    }
+    
+    .search-box .form-control {
+        padding-left: 45px;
+        border-radius: 50px;
+        border: 1px solid #dee2e6;
+    }
+    
+    .search-box i {
+        position: absolute;
+        left: 18px;
+        top: 12px;
+        color: #adb5bd;
+    }
+    
+    /* Pagination */
+    .pagination {
+        margin-top: 50px;
+    }
+    
+    .pagination .page-link {
+        color: #28a745;
+        border-radius: 50px;
+        margin: 0 3px;
+        border: none;
+        padding: 10px 18px;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .blog-hero h1 {
+            font-size: 2.5rem;
+        }
+        
+        .featured-article-img {
+            height: 250px;
+        }
+        
+        .featured-article-content {
+            padding: 25px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Blog Hero Section -->
+<section class="blog-hero text-center">
+    <div class="container blog-hero-content">
+        <h1>🌱 CSHAMBA Farm Blog</h1>
+        <p class="lead mx-auto">
+            Discover expert farming tips, sustainable agriculture practices, 
+            and success stories from our farm to yours.
+        </p>
+        {% if user.is_authenticated and user.user_type == 'FARMER' %}
+        <a href="{% url 'add-article' %}" class="btn btn-light btn-lg mt-4">
+            <i class="fas fa-pen-fancy me-2"></i>Write an Article
+        </a>
+        {% endif %}
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Search Results Info -->
+            {% if query %}
+            <div class="alert alert-info mb-4">
+                <i class="fas fa-search me-2"></i>
+                Search results for: <strong>"{{ query }}"</strong>
+                <a href="{% url 'article-list' %}" class="float-end text-decoration-none">
+                    <i class="fas fa-times me-1"></i>Clear
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Featured Article (First article, if exists) -->
+            {% if articles and not query and not selected_category %}
+                {% with featured=articles.0 %}
+                <article class="featured-article">
+                    <div class="row g-0">
+                        <div class="col-md-6">
+                            {% if featured.featured_image %}
+                            <img src="{{ featured.featured_image.url }}" 
+                                 class="featured-article-img" 
+                                 alt="{{ featured.title }}">
+                            {% else %}
+                            <img src="{% static 'images/blog-default.jpg' %}" 
+                                 class="featured-article-img" 
+                                 alt="{{ featured.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="featured-article-content">
+                                <span class="featured-badge">
+                                    <i class="fas fa-star me-1"></i>Featured Article
+                                </span>
+                                <h2 class="mb-3">{{ featured.title }}</h2>
+                                <div class="article-meta mb-3">
+                                    {% if featured.author.profile_picture %}
+                                    <img src="{{ featured.author.profile_picture.url }}" 
+                                         class="author-avatar" 
+                                         alt="{{ featured.author.username }}">
+                                    {% else %}
+                                    <img src="{% static 'images/default-avatar.jpg' %}" 
+                                         class="author-avatar" 
+                                         alt="{{ featured.author.username }}">
+                                    {% endif %}
+                                    <span>
+                                        By <strong>{{ featured.author.get_full_name|default:featured.author.username }}</strong>
+                                    </span>
+                                    <span class="mx-2">•</span>
+                                    <span>
+                                        <i class="far fa-calendar-alt me-1"></i>
+                                        {{ featured.created_at|date:"F d, Y" }}
+                                    </span>
+                                    <span class="mx-2">•</span>
+                                    <span>
+                                        <i class="far fa-clock me-1"></i>
+                                        {{ featured.content|wordcount|divisibleby:200|add:1 }} min read
+                                    </span>
+                                </div>
+                                <p class="featured-excerpt mb-4">
+                                    {{ featured.excerpt|default:featured.content|truncatechars:200 }}
+                                </p>
+                                <a href="{% url 'article-detail' featured.slug %}" 
+                                   class="btn btn-success btn-lg">
+                                    Read Full Article
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {% endwith %}
+            {% endif %}
+
+            <!-- Articles Grid -->
+            {% if articles %}
+                <div class="row">
+                    {% for article in articles %}
+                        {% if not forloop.first or query or selected_category %}
+                        <div class="col-md-6 mb-4">
+                            <article class="article-card">
+                                <!-- Article Image -->
+                                <div class="article-img-wrapper">
+                                    {% if article.featured_image %}
+                                    <img src="{{ article.featured_image.url }}" 
+                                         class="article-img" 
+                                         alt="{{ article.title }}">
+                                    {% else %}
+                                    <img src="{% static 'images/blog-default.jpg' %}" 
+                                         class="article-img" 
+                                         alt="{{ article.title }}">
+                                    {% endif %}
+                                    
+                                    <!-- Category -->
+                                    <div class="article-category">
+                                        <a href="?category={{ article.category.id }}" 
+                                           class="category-badge text-decoration-none">
+                                            <i class="fas fa-tag me-1"></i>
+                                            {{ article.category.name }}
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Article Content -->
+                                <div class="article-content">
+                                    <div class="article-meta">
+                                        {% if article.author.profile_picture %}
+                                        <img src="{{ article.author.profile_picture.url }}" 
+                                             class="author-avatar" 
+                                             alt="{{ article.author.username }}">
+                                        {% else %}
+                                        <img src="{% static 'images/default-avatar.jpg' %}" 
+                                             class="author-avatar" 
+                                             alt="{{ article.author.username }}">
+                                        {% endif %}
+                                        <span>{{ article.author.get_full_name|default:article.author.username }}</span>
+                                        <span class="mx-2">•</span>
+                                        <span>
+                                            <i class="far fa-calendar-alt"></i>
+                                            {{ article.created_at|date:"M d, Y" }}
+                                        </span>
+                                    </div>
+
+                                    <h3 class="article-title">
+                                        <a href="{% url 'article-detail' article.slug %}">
+                                            {{ article.title }}
+                                        </a>
+                                    </h3>
+
+                                    <p class="article-excerpt">
+                                        {{ article.excerpt|default:article.content|truncatechars:120 }}
+                                    </p>
+
+                                    <div class="article-footer">
+                                        <a href="{% url 'article-detail' article.slug %}" 
+                                           class="read-more">
+                                            Read More 
+                                            <i class="fas fa-arrow-right ms-2"></i>
+                                        </a>
+                                        
+                                        <div class="article-stats">
+                                            <span>
+                                                <i class="far fa-eye"></i>
+                                                {{ article.views }}
+                                            </span>
+                                            <span>
+                                                <i class="far fa-heart"></i>
+                                                0
+                                            </span>
+                                            <span>
+                                                <i class="far fa-comment"></i>
+                                                0
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if articles.has_other_pages %}
+                <nav aria-label="Blog pagination" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if articles.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
+                               aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ articles.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for num in articles.paginator.page_range %}
+                            {% if articles.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                            {% elif num > articles.number|add:'-3' and num < articles.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">
+                                    {{ num }}
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if articles.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ articles.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ articles.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
+                               aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+            {% else %}
+                <!-- No Articles Found -->
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-newspaper fa-4x text-muted"></i>
+                    </div>
+                    <h4 class="text-muted mb-3">No Articles Found</h4>
+                    <p class="text-muted mb-4">
+                        {% if query %}
+                        No articles match your search criteria. Try different keywords.
+                        {% elif selected_category %}
+                        No articles in this category yet. Check back soon!
+                        {% else %}
+                        No articles have been published yet. Check back later for farming tips and updates!
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'article-list' %}" class="btn btn-success">
+                        <i class="fas fa-redo me-2"></i>View All Articles
+                    </a>
+                    
+                    {% if user.is_authenticated and user.user_type == 'FARMER' %}
+                    <a href="{% url 'add-article' %}" class="btn btn-outline-success ms-2">
+                        <i class="fas fa-pen-fancy me-2"></i>Write First Article
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Search Widget -->
+            <div class="sidebar-widget">
+                <h5 class="widget-title">
+                    <i class="fas fa-search"></i>
+                    Search Articles
+                </h5>
+                <form method="get" action="{% url 'article-list' %}" class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" 
+                           name="q" 
+                           class="form-control" 
+                           placeholder="Search farming tips..." 
+                           value="{{ query|default:'' }}">
+                </form>
+            </div>
+
+            <!-- Categories Widget -->
+            <div class="sidebar-widget">
+                <h5 class="widget-title">
+                    <i class="fas fa-folder"></i>
+                    Categories
+                </h5>
+                <ul class="categories-list">
+                    <li>
+                        <a href="{% url 'article-list' %}" 
+                           class="{% if not selected_category %}fw-bold text-success{% endif %}">
+                            <span>All Categories</span>
+                            {% comment %} <span class="count">{{ total_articles|default:articles.paginator.count }}</span> {% endcomment %}
+                        </a>
+                    </li>
+                    {% for category in categories %}
+                    <li>
+                        <a href="?category={{ category.id }}" 
+                           class="{% if selected_category == category.id|stringformat:'s' %}fw-bold text-success{% endif %}">
+                            <span>{{ category.name }}</span>
+                            <span class="count">{{ category.article_count }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Popular Posts Widget -->
+            {% if popular_articles %}
+            <div class="sidebar-widget">
+                <h5 class="widget-title">
+                    <i class="fas fa-fire"></i>
+                    Popular Posts
+                </h5>
+                {% for article in popular_articles %}
+                <div class="popular-post">
+                    {% if article.featured_image %}
+                    <img src="{{ article.featured_image.url }}" 
+                         class="popular-post-img" 
+                         alt="{{ article.title }}">
+                    {% else %}
+                    <img src="{% static 'images/blog-default.jpg' %}" 
+                         class="popular-post-img" 
+                         alt="{{ article.title }}">
+                    {% endif %}
+                    <div class="popular-post-content">
+                        <h6 class="popular-post-title">
+                            <a href="{% url 'article-detail' article.slug %}">
+                                {{ article.title|truncatechars:50 }}
+                            </a>
+                        </h6>
+                        <div class="popular-post-meta">
+                            <i class="far fa-eye me-1"></i> {{ article.views }} views
+                            <span class="mx-1">•</span>
+                            <i class="far fa-calendar-alt me-1"></i> {{ article.created_at|date:"M d, Y" }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Newsletter Widget -->
+            <div class="sidebar-widget bg-light">
+                <h5 class="widget-title">
+                    <i class="fas fa-envelope"></i>
+                    Farming Newsletter
+                </h5>
+                <p class="text-muted mb-3">
+                    Get weekly farming tips, seasonal planting guides, and exclusive offers!
+                </p>
+                {% comment %} <form class="newsletter-form" method="post" action="{% url 'newsletter-signup' %}"> {% endcomment %}
+                    {% comment %} {% csrf_token %} {% endcomment %}
+                    <div class="input-group">
+                        <input type="email" 
+                               name="email" 
+                               class="form-control" 
+                               placeholder="Your email address" 
+                               required>
+                        <button class="btn btn-success" type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <small class="text-muted">
+                        <i class="fas fa-lock me-1"></i>No spam, unsubscribe anytime.
+                    </small>
+                {% comment %} </form> {% endcomment %}
+            </div>
+
+            <!-- Tags Widget (Optional) -->
+            <div class="sidebar-widget">
+                <h5 class="widget-title">
+                    <i class="fas fa-tags"></i>
+                    Popular Topics
+                </h5>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="?q=organic" class="btn btn-outline-success btn-sm">#OrganicFarming</a>
+                    <a href="?q=chicken" class="btn btn-outline-success btn-sm">#ChickenFarming</a>
+                    <a href="?q=vegetables" class="btn btn-outline-success btn-sm">#Vegetables</a>
+                    <a href="?q=sustainable" class="btn btn-outline-success btn-sm">#Sustainable</a>
+                    <a href="?q=seedlings" class="btn btn-outline-success btn-sm">#Seedlings</a>
+                    <a href="?q=harvest" class="btn btn-outline-success btn-sm">#Harvest</a>
+                    <a href="?q=soil" class="btn btn-outline-success btn-sm">#SoilHealth</a>
+                    <a href="?q=pests" class="btn btn-outline-success btn-sm">#PestControl</a>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="sidebar-widget text-center bg-success text-white">
+                <i class="fas fa-leaf fa-3x mb-3"></i>
+                <h5 class="text-white mb-3">Share Your Farming Story!</h5>
+                <p class="text-white-50 mb-3">
+                    Are you a farmer with tips to share? Contribute to our blog and help others grow!
+                </p>
+                {% if user.is_authenticated and user.user_type == 'FARMER' %}
+                <a href="{% url 'add-article' %}" class="btn btn-light w-100">
+                    <i class="fas fa-pen-fancy me-2"></i>Write an Article
+                </a>
+                {% else %}
+                <a href="{% url 'register' %}?type=FARMER" class="btn btn-light w-100">
+                    <i class="fas fa-user-plus me-2"></i>Join as Farmer
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit search on typing (with debounce)
+    let searchTimeout;
+    const searchInput = document.querySelector('input[name="q"]');
+    
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function(e) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(function() {
+                if (searchInput.value.length >= 2 || searchInput.value.length === 0) {
+                    e.target.form.submit();
+                }
+            }, 800);
+        });
+    }
+
+    // Newsletter form submission with AJAX
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Thank you for subscribing to our newsletter!');
+                    this.reset();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    }
+
+    // Animate article cards on scroll
+    const cards = document.querySelectorAll('.article-card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    });
+
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s, transform 0.6s';
+        observer.observe(card);
+    });
+
+    // Reading time calculator
+    document.querySelectorAll('.article-meta span:last-child').forEach(el => {
+        if (el.textContent.includes('min read')) {
+            // Already has reading time
+        }
+    });
+});
+</script>
+{% endblock %}

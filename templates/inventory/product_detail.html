@@ -1,0 +1,1196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - CSHAMBA Farm Products{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Product Gallery */
+    .product-gallery {
+        position: relative;
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        margin-bottom: 30px;
+    }
+    
+    .main-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 15px;
+        cursor: zoom-in;
+        transition: transform 0.3s;
+    }
+    
+    .main-image:hover {
+        transform: scale(1.02);
+    }
+    
+    .thumbnail-container {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    
+    .thumbnail {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.3s;
+    }
+    
+    .thumbnail:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    
+    .thumbnail.active {
+        border-color: #28a745;
+        transform: scale(0.98);
+    }
+    
+    /* Product Badges */
+    .product-badge {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        z-index: 10;
+    }
+    
+    .badge-custom {
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    
+    .badge-organic {
+        background: #28a745;
+        color: white;
+    }
+    
+    .badge-fresh {
+        background: #17a2b8;
+        color: white;
+    }
+    
+    .badge-limited {
+        background: #dc3545;
+        color: white;
+    }
+    
+    /* Product Info */
+    .product-info {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .product-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #212529;
+    }
+    
+    .product-meta {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .meta-item {
+        display: flex;
+        align-items: center;
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+    
+    .meta-item i {
+        color: #28a745;
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+    
+    .price-section {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 25px;
+    }
+    
+    .current-price {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #28a745;
+        line-height: 1.2;
+    }
+    
+    .original-price {
+        font-size: 1.3rem;
+        color: #adb5bd;
+        text-decoration: line-through;
+        margin-left: 15px;
+    }
+    
+    .price-unit {
+        font-size: 1rem;
+        color: #6c757d;
+        margin-left: 5px;
+    }
+    
+    .stock-info {
+        margin-top: 15px;
+        padding: 15px;
+        border-radius: 10px;
+        background: white;
+    }
+    
+    .stock-status {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .in-stock {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .low-stock {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .out-of-stock {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .stock-count {
+        font-size: 1.1rem;
+        color: #212529;
+        margin-top: 10px;
+    }
+    
+    .stock-count strong {
+        color: #28a745;
+        font-size: 1.3rem;
+    }
+    
+    /* Quantity Selector */
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 25px 0;
+    }
+    
+    .quantity-label {
+        font-weight: 600;
+        color: #495057;
+        min-width: 70px;
+    }
+    
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        border: 1px solid #dee2e6;
+        border-radius: 50px;
+        overflow: hidden;
+    }
+    
+    .quantity-btn {
+        width: 40px;
+        height: 40px;
+        background: white;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .quantity-btn:hover {
+        background: #28a745;
+        color: white;
+    }
+    
+    .quantity-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .quantity-input {
+        width: 60px;
+        height: 40px;
+        border: none;
+        text-align: center;
+        font-weight: 600;
+        border-left: 1px solid #dee2e6;
+        border-right: 1px solid #dee2e6;
+    }
+    
+    .quantity-input:focus {
+        outline: none;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 25px;
+    }
+    
+    .btn-add-to-cart {
+        flex: 2;
+        padding: 15px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+    }
+    
+    .btn-wishlist {
+        flex: 1;
+        padding: 15px;
+        border-radius: 50px;
+        background: white;
+        border: 2px solid #28a745;
+        color: #28a745;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    
+    .btn-wishlist:hover {
+        background: #28a745;
+        color: white;
+    }
+    
+    .btn-wishlist.active {
+        background: #28a745;
+        color: white;
+    }
+    
+    /* Product Description */
+    .description-section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .section-title i {
+        color: #28a745;
+        margin-right: 10px;
+    }
+    
+    .product-description {
+        line-height: 1.8;
+        color: #495057;
+    }
+    
+    .product-description p {
+        margin-bottom: 20px;
+    }
+    
+    .product-description ul {
+        padding-left: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .product-description li {
+        margin-bottom: 10px;
+    }
+    
+    /* Product Features */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .feature-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+    
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: #28a745;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+    
+    .feature-text {
+        font-weight: 500;
+        color: #212529;
+    }
+    
+    .feature-text small {
+        display: block;
+        color: #6c757d;
+        font-size: 0.85rem;
+    }
+    
+    /* Farmer Info */
+    .farmer-info {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-top: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .farmer-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #28a745;
+    }
+    
+    .farmer-details h5 {
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    
+    .farmer-details p {
+        color: #6c757d;
+        margin-bottom: 5px;
+    }
+    
+    .farmer-stats {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+    }
+    
+    .farmer-stat {
+        text-align: center;
+    }
+    
+    .farmer-stat .number {
+        font-weight: 700;
+        color: #28a745;
+        font-size: 1.1rem;
+    }
+    
+    .farmer-stat .label {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+    
+    /* Related Products */
+    .related-products {
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .related-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .related-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    
+    .related-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+    
+    .related-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    .related-info {
+        padding: 20px;
+    }
+    
+    .related-name {
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #212529;
+    }
+    
+    .related-price {
+        color: #28a745;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    
+    /* Reviews Section */
+    .reviews-section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .rating-summary {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .average-rating {
+        text-align: center;
+    }
+    
+    .rating-number {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #28a745;
+        line-height: 1;
+    }
+    
+    .stars {
+        color: #ffc107;
+        font-size: 1.2rem;
+        margin: 5px 0;
+    }
+    
+    .total-reviews {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .review-card {
+        padding: 20px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .review-card:last-child {
+        border-bottom: none;
+    }
+    
+    .reviewer {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .reviewer-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 15px;
+        object-fit: cover;
+    }
+    
+    .reviewer-info h6 {
+        margin-bottom: 2px;
+        font-weight: 600;
+    }
+    
+    .review-date {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+    
+    .review-rating {
+        color: #ffc107;
+        margin-bottom: 10px;
+    }
+    
+    .review-text {
+        color: #495057;
+        line-height: 1.6;
+    }
+    
+    /* Share Section */
+    .share-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .share-label {
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .share-buttons {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .share-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        transition: all 0.3s;
+    }
+    
+    .share-btn:hover {
+        transform: translateY(-3px);
+    }
+    
+    .share-facebook { background: #3b5998; }
+    .share-twitter { background: #1da1f2; }
+    .share-whatsapp { background: #25d366; }
+    .share-email { background: #6c757d; }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .product-title {
+            font-size: 1.8rem;
+        }
+        
+        .main-image {
+            height: 300px;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .rating-summary {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'product-list' %}">Products</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'product-list' %}?category={{ product.category.id }}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Gallery Column -->
+        <div class="col-lg-6">
+            <div class="product-gallery">
+                <!-- Product Badges -->
+                <div class="product-badge">
+                    {% if product.product_type == 'ORGANIC' %}
+                    <span class="badge-custom badge-organic">
+                        <i class="fas fa-leaf me-1"></i>Organic
+                    </span>
+                    {% elif product.product_type == 'FRESH' %}
+                    <span class="badge-custom badge-fresh">
+                        <i class="fas fa-snowflake me-1"></i>Fresh
+                    </span>
+                    {% elif product.quantity < 10 %}
+                    <span class="badge-custom badge-limited">
+                        <i class="fas fa-clock me-1"></i>Limited Stock
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Main Image -->
+                {% if product.image %}
+                <img src="{{ product.image.url }}" 
+                     class="main-image" 
+                     alt="{{ product.name }}"
+                     id="mainProductImage">
+                {% else %}
+                <img src="{% static 'images/default-product.jpg' %}" 
+                     class="main-image" 
+                     alt="{{ product.name }}"
+                     id="mainProductImage">
+                {% endif %}
+
+                <!-- Thumbnails (if you have multiple images) -->
+                <div class="thumbnail-container">
+                    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'images/default-product.jpg' %}{% endif %}" 
+                         class="thumbnail active" 
+                         onclick="changeImage(this)"
+                         alt="Thumbnail 1">
+                    <!-- Add more thumbnails if you have multiple product images -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Info Column -->
+        <div class="col-lg-6">
+            <div class="product-info">
+                <!-- Product Type -->
+                <span class="badge bg-success mb-3">
+                    <i class="fas fa-tag me-1"></i>{{ product.get_product_type_display }}
+                </span>
+
+                <!-- Title -->
+                <h1 class="product-title">{{ product.name }}</h1>
+
+                <!-- Meta Information -->
+                <div class="product-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-box"></i>
+                        <span>SKU: <strong>PRD-{{ product.id }}</strong></span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-folder"></i>
+                        <span>Category: <strong>{{ product.category.name }}</strong></span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Added: <strong>{{ product.created_at|date:"M d, Y" }}</strong></span>
+                    </div>
+                </div>
+
+                <!-- Price Section -->
+                <div class="price-section">
+                    <div class="d-flex align-items-center">
+                        <span class="current-price">KSh {{ product.price }}</span>
+                        <span class="price-unit">/{{ product.unit }}</span>
+                    </div>
+                    
+                    <!-- Stock Status -->
+                    <div class="stock-info">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="stock-status {% if product.quantity > 10 %}in-stock{% elif product.quantity > 0 %}low-stock{% else %}out-of-stock{% endif %}">
+                                <i class="fas {% if product.quantity > 0 %}fa-check-circle{% else %}fa-times-circle{% endif %} me-1"></i>
+                                {% if product.quantity > 10 %}
+                                In Stock
+                                {% elif product.quantity > 0 %}
+                                Low Stock
+                                {% else %}
+                                Out of Stock
+                                {% endif %}
+                            </span>
+                            <span class="text-muted">
+                                <i class="fas fa-boxes me-1"></i>
+                                Sold: <strong>{{ product.sold_count|default:0 }}</strong>
+                            </span>
+                        </div>
+                        
+                        <div class="stock-count">
+                            <i class="fas fa-cubes me-2 text-success"></i>
+                            Available: <strong>{{ product.quantity }}</strong> {{ product.unit }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quantity Selector -->
+                {% if product.quantity > 0 %}
+                <div class="quantity-selector">
+                    <span class="quantity-label">Quantity:</span>
+                    <div class="quantity-controls">
+                        <button type="button" class="quantity-btn" onclick="decrementQuantity()">−</button>
+                        <input type="number" class="quantity-input" id="quantity" value="1" min="1" max="{{ product.quantity }}" readonly>
+                        <button type="button" class="quantity-btn" onclick="incrementQuantity()">+</button>
+                    </div>
+                    <span class="text-muted">(Max: {{ product.quantity }})</span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-success btn-add-to-cart" 
+                            onclick="addToCart({{ product.id }})"
+                            {% if product.quantity == 0 %}disabled{% endif %}>
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        Add to Cart
+                    </button>
+                    <button class="btn-wishlist" id="wishlistBtn" onclick="toggleWishlist({{ product.id }})">
+                        <i class="far fa-heart me-2"></i>
+                        Wishlist
+                    </button>
+                </div>
+
+                <!-- Buy Now Button -->
+                <div class="mt-3">
+                    <button class="btn btn-outline-success w-100 py-3" 
+                            onclick="buyNow({{ product.id }})"
+                            {% if product.quantity == 0 %}disabled{% endif %}>
+                        <i class="fas fa-bolt me-2"></i>
+                        Buy Now
+                    </button>
+                </div>
+                {% else %}
+                <div class="alert alert-danger text-center py-4">
+                    <i class="fas fa-exclamation-circle fa-2x mb-3"></i>
+                    <h5>Out of Stock</h5>
+                    <p class="mb-0">This product is currently unavailable.</p>
+                    <button class="btn btn-outline-success mt-3" onclick="notifyMe({{ product.id }})">
+                        <i class="fas fa-bell me-2"></i>Notify Me When Available
+                    </button>
+                </div>
+                {% endif %}
+
+                <!-- Farmer Info -->
+                <div class="farmer-info">
+                    <div class="d-flex align-items-center">
+                        <img src="{% static 'images/farmer-avatar.jpg' %}" 
+                             class="farmer-avatar me-3" 
+                             alt="Farmer">
+                        <div class="farmer-details">
+                            <h5>CSHAMBA Farm</h5>
+                            <p>
+                                <i class="fas fa-map-marker-alt text-success me-1"></i>
+                                Kiambu, Kenya
+                            </p>
+                            <div class="farmer-stats">
+                                <div class="farmer-stat">
+                                    <div class="number">150+</div>
+                                    <div class="label">Products</div>
+                                </div>
+                                <div class="farmer-stat">
+                                    <div class="number">98%</div>
+                                    <div class="label">Positive</div>
+                                </div>
+                                <div class="farmer-stat">
+                                    <div class="number">2k+</div>
+                                    <div class="label">Customers</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Section -->
+                <div class="share-section">
+                    <span class="share-label">Share:</span>
+                    <div class="share-buttons">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+                           target="_blank" 
+                           class="share-btn share-facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text=Check out this {{ product.name }} at CSHAMBA Farm!" 
+                           target="_blank" 
+                           class="share-btn share-twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://wa.me/?text=Check out this {{ product.name }} at CSHAMBA Farm! {{ request.build_absolute_uri }}" 
+                           target="_blank" 
+                           class="share-btn share-whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:?subject={{ product.name }} at CSHAMBA Farm&body=Check out this product: {{ request.build_absolute_uri }}" 
+                           class="share-btn share-email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Description Section -->
+    <div class="description-section">
+        <h3 class="section-title">
+            <i class="fas fa-align-left"></i>
+            Product Description
+        </h3>
+        <div class="product-description">
+            {{ product.description|linebreaks }}
+        </div>
+
+        <!-- Product Features -->
+        <div class="features-grid mt-4">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="feature-text">
+                    100% Organic
+                    <small>Naturally grown</small>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="feature-text">
+                    Free Delivery
+                    <small>Within 10km</small>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="feature-text">
+                    Quality Guaranteed
+                    <small>Farm fresh</small>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="feature-text">
+                    Same Day Harvest
+                    <small>Fresh daily</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+        <h3 class="section-title">
+            <i class="fas fa-star"></i>
+            Customer Reviews
+        </h3>
+
+        <!-- Rating Summary -->
+        <div class="rating-summary">
+            <div class="average-rating">
+                <div class="rating-number">4.8</div>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <div class="total-reviews">Based on 24 reviews</div>
+            </div>
+            <div class="rating-bars flex-grow-1">
+                <!-- Rating bars would go here -->
+            </div>
+        </div>
+
+        <!-- Review List -->
+        <div class="reviews-list">
+            <!-- Sample Review 1 -->
+            <div class="review-card">
+                <div class="reviewer">
+                    <img src="{% static 'images/default-avatar.jpg' %}" class="reviewer-avatar" alt="Reviewer">
+                    <div class="reviewer-info">
+                        <h6>John Mwangi</h6>
+                        <div class="review-date">Reviewed 2 days ago</div>
+                    </div>
+                </div>
+                <div class="review-rating">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="review-text">
+                    Excellent quality! The products are always fresh and well packaged. 
+                    Will definitely buy again.
+                </p>
+            </div>
+
+            <!-- Sample Review 2 -->
+            <div class="review-card">
+                <div class="reviewer">
+                    <img src="{% static 'images/default-avatar.jpg' %}" class="reviewer-avatar" alt="Reviewer">
+                    <div class="reviewer-info">
+                        <h6>Mary Wanjiku</h6>
+                        <div class="review-date">Reviewed 1 week ago</div>
+                    </div>
+                </div>
+                <div class="review-rating">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="review-text">
+                    Great customer service and fast delivery. The vegetables were very fresh.
+                </p>
+            </div>
+        </div>
+
+        <!-- Write Review Button -->
+        {% if user.is_authenticated %}
+        <div class="text-center mt-4">
+            <button class="btn btn-outline-success" onclick="writeReview({{ product.id }})">
+                <i class="fas fa-pen me-2"></i>Write a Review
+            </button>
+        </div>
+        {% else %}
+        <div class="text-center mt-4">
+            <p class="text-muted">
+                <a href="{% url 'login' %}?next={{ request.path }}" class="text-success">Login</a> to write a review
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="related-products">
+        <h3 class="related-title">
+            <i class="fas fa-seedling text-success me-2"></i>
+            You Might Also Like
+        </h3>
+        <div class="row g-4">
+            {% for related in related_products %}
+            <div class="col-md-3 col-6">
+                <a href="{% url 'product-detail' related.pk %}" class="related-card">
+                    {% if related.image %}
+                    <img src="{{ related.image.url }}" class="related-img" alt="{{ related.name }}">
+                    {% else %}
+                    <img src="{% static 'images/default-product.jpg' %}" class="related-img" alt="{{ related.name }}">
+                    {% endif %}
+                    <div class="related-info">
+                        <h6 class="related-name">{{ related.name|truncatechars:30 }}</h6>
+                        <div class="related-price">KSh {{ related.price }}/{{ related.unit }}</div>
+                        <small class="text-muted">
+                            <i class="fas fa-check-circle text-success me-1"></i>
+                            In Stock
+                        </small>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Farmer Actions (if user is farmer) -->
+    {% if user.is_authenticated and user.user_type == 'FARMER' %}
+    <div class="alert alert-light border mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-tools me-2 text-success"></i>
+                <strong>Farmer Tools</strong>
+            </div>
+            <div>
+                <a href="{% url 'update-product' product.pk %}" class="btn btn-sm btn-outline-success me-2">
+                    <i class="fas fa-edit me-1"></i>Edit Product
+                </a>
+                <a href="{% url 'delete-product' product.pk %}" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-trash me-1"></i>Delete
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle me-2"></i>
+                    Success!
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="fas fa-shopping-cart fa-3x text-success mb-3"></i>
+                <h5 id="successMessage">Product added to cart successfully!</h5>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <a href="{% url 'cart-view' %}" class="btn btn-success">
+                    <i class="fas fa-shopping-cart me-2"></i>View Cart
+                </a>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Continue Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Quantity selector functions
+    function incrementQuantity() {
+        const input = document.getElementById('quantity');
+        const max = parseInt(input.getAttribute('max'));
+        let value = parseInt(input.value);
+        if (value < max) {
+            input.value = value + 1;
+        }
+    }
+    
+    function decrementQuantity() {
+        const input = document.getElementById('quantity');
+        let value = parseInt(input.value);
+        if (value > 1) {
+            input.value = value - 1;
+        }
+    }
+    
+    // Change main image
+    function changeImage(thumbnail) {
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        thumbnail.classList.add('active');
+        document.getElementById('mainProductImage').src = thumbnail.src;
+    }
+    
+    // Add to cart function
+    function addToCart(productId) {
+        const quantity = document.getElementById('quantity').value;
+        
+        fetch(`/sales/cart/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quantity: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('successMessage').textContent = 
+                    `Added ${quantity} item(s) to cart successfully!`;
+                new bootstrap.Modal(document.getElementById('successModal')).show();
+                
+                // Update cart count in navbar
+                const cartCount = document.querySelector('.cart-count');
+                if (cartCount) {
+                    cartCount.textContent = data.cart_count;
+                }
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    // Buy now function
+    function buyNow(productId) {
+        const quantity = document.getElementById('quantity').value;
+        
+        // Add to cart and redirect to checkout
+        fetch(`/sales/cart/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quantity: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = '{% url "create-order" %}';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    // Toggle wishlist
+    function toggleWishlist(productId) {
+        const btn = document.getElementById('wishlistBtn');
+        
+        fetch(`/wishlist/toggle/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.is_in_wishlist) {
+                btn.classList.add('active');
+                btn.innerHTML = '<i class="fas fa-heart me-2"></i>Wishlisted';
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = '<i class="far fa-heart me-2"></i>Wishlist';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    // Notify me when available
+    function notifyMe(productId) {
+        fetch(`/products/notify/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('You will be notified when this product is back in stock!');
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    // Write review
+    function writeReview(productId) {
+        window.location.href = `/products/${productId}/review/`;
+    }
+    
+    // Image zoom functionality
+    document.querySelector('.main-image').addEventListener('mousemove', function(e) {
+        const { left, top, width, height } = this.getBoundingClientRect();
+        const x = (e.clientX - left) / width * 100;
+        const y = (e.clientY - top) / height * 100;
+        this.style.transformOrigin = `${x}% ${y}%`;
+        this.style.transform = 'scale(1.5)';
+    });
+    
+    document.querySelector('.main-image').addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1)';
+    });
+</script>
+{% endblock %}

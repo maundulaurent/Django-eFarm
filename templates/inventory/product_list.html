@@ -3,296 +3,206 @@
 
 {% block title %}Our Farm Products - CSHAMBA Farm{% endblock %}
 
-{% block extra_css %}
-<style>
-    .product-card {
-        transition: transform 0.3s, box-shadow 0.3s;
-        height: 100%;
-        border: none;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    }
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-    .product-img-wrapper {
-        height: 220px;
-        overflow: hidden;
-        position: relative;
-    }
-    .product-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s;
-    }
-    .product-card:hover .product-img {
-        transform: scale(1.05);
-    }
-    .product-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 2;
-    }
-    .product-type-badge {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        z-index: 2;
-    }
-    .product-price {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: #28a745;
-    }
-    .old-price {
-        text-decoration: line-through;
-        color: #999;
-        font-size: 0.9rem;
-        margin-left: 5px;
-    }
-    .filter-sidebar {
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-    .filter-title {
-        font-weight: 600;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #e9ecef;
-    }
-    .filter-group {
-        margin-bottom: 25px;
-    }
-    .filter-group h6 {
-        font-weight: 600;
-        margin-bottom: 15px;
-        color: #495057;
-    }
-    .form-check {
-        margin-bottom: 8px;
-    }
-    .form-check-input:checked {
-        background-color: #28a745;
-        border-color: #28a745;
-    }
-    .btn-outline-success:hover {
-        background-color: #28a745;
-        color: white;
-    }
-    .stock-status {
-        font-size: 0.85rem;
-        padding: 3px 10px;
-        border-radius: 20px;
-        display: inline-block;
-    }
-    .in-stock {
-        background: #d4edda;
-        color: #155724;
-    }
-    .low-stock {
-        background: #fff3cd;
-        color: #856404;
-    }
-    .out-of-stock {
-        background: #f8d7da;
-        color: #721c24;
-    }
-    .pagination .page-link {
-        color: #28a745;
-    }
-    .pagination .page-item.active .page-link {
-        background-color: #28a745;
-        border-color: #28a745;
-        color: white;
-    }
-    .breadcrumb {
-        background: transparent;
-        padding: 0;
-    }
-    .breadcrumb-item a {
-        color: #28a745;
-    }
-    .search-box {
-        position: relative;
-    }
-    .search-box .form-control {
-        padding-left: 40px;
-        border-radius: 50px;
-        border: 1px solid #dee2e6;
-    }
-    .search-box i {
-        position: absolute;
-        left: 15px;
-        top: 12px;
-        color: #adb5bd;
-    }
-    .category-icon {
-        width: 30px;
-        height: 30px;
-        margin-right: 10px;
-        color: #28a745;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="container mt-4">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Farm Products</li>
+    <nav class="flex mb-4 text-sm" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+            <li>
+                <a href="{% url 'home' %}" class="text-green-600 hover:text-green-700">Home</a>
+            </li>
+            <li class="flex items-center">
+                <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+            </li>
+            <li class="text-gray-500" aria-current="page">Farm Products</li>
         </ol>
     </nav>
 
-    <div class="row">
+    <div class="flex flex-col lg:flex-row gap-8">
         <!-- Sidebar Filters -->
-        <div class="col-lg-3 mb-4">
-            <div class="filter-sidebar">
-                <h4 class="filter-title">
-                    <i class="fas fa-filter me-2"></i>Filter Products
+        <div class="lg:w-1/4">
+            <div class="bg-white rounded-xl shadow-sm p-6 sticky top-24">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">
+                    <svg class="w-5 h-5 inline mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                    </svg>
+                    Filter Products
                 </h4>
                 
                 <!-- Search Form -->
-                <div class="filter-group">
-                    <h6><i class="fas fa-search me-2"></i>Search</h6>
+                <div class="mb-6">
+                    <h6 class="font-medium text-gray-700 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Search
+                    </h6>
                     <form method="get" id="searchForm">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
+                        <div class="relative">
                             <input type="text" 
                                    name="q" 
-                                   class="form-control" 
+                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" 
                                    placeholder="Search products..." 
                                    value="{{ query|default:'' }}">
+                            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
                         </div>
                     </form>
                 </div>
 
                 <!-- Categories Filter -->
-                <div class="filter-group">
-                    <h6><i class="fas fa-tags me-2"></i>Categories</h6>
-                    <div class="form-check">
-                        <input class="form-check-input filter-checkbox" 
-                               type="checkbox" 
-                               name="category" 
-                               value="" 
-                               id="catAll"
-                               {% if not selected_category %}checked{% endif %}>
-                        <label class="form-check-label" for="catAll">
-                            All Categories
+                <div class="mb-6">
+                    <h6 class="font-medium text-gray-700 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l5 5a2 2 0 01.586 1.414V19a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
+                        </svg>
+                        Categories
+                    </h6>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" 
+                                   class="form-checkbox h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500 filter-checkbox" 
+                                   name="category" 
+                                   value="" 
+                                   id="catAll"
+                                   {% if not selected_category %}checked{% endif %}>
+                            <span class="text-gray-700">All Categories</span>
                         </label>
-                    </div>
-                    {% for category in categories %}
-                    <div class="form-check">
-                        <input class="form-check-input filter-checkbox" 
-                               type="checkbox" 
-                               name="category" 
-                               value="{{ category.id }}" 
-                               id="cat{{ category.id }}"
-                               {% if selected_category == category.id|stringformat:"s" %}checked{% endif %}>
-                        <label class="form-check-label" for="cat{{ category.id }}">
-                            {{ category.name }}
+                        {% for category in categories %}
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" 
+                                   class="form-checkbox h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500 filter-checkbox" 
+                                   name="category" 
+                                   value="{{ category.id }}" 
+                                   id="cat{{ category.id }}"
+                                   {% if selected_category == category.id|stringformat:"s" %}checked{% endif %}>
+                            <span class="text-gray-700">{{ category.name }}</span>
                         </label>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
 
                 <!-- Product Type Filter -->
-                <div class="filter-group">
-                    <h6><i class="fas fa-box me-2"></i>Product Type</h6>
-                    <div class="form-check">
-                        <input class="form-check-input filter-checkbox" 
-                               type="checkbox" 
-                               name="type" 
-                               value="" 
-                               id="typeAll"
-                               {% if not selected_type %}checked{% endif %}>
-                        <label class="form-check-label" for="typeAll">
-                            All Types
+                <div class="mb-6">
+                    <h6 class="font-medium text-gray-700 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        Product Type
+                    </h6>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" 
+                                   class="form-checkbox h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500 filter-checkbox" 
+                                   name="type" 
+                                   value="" 
+                                   id="typeAll"
+                                   {% if not selected_type %}checked{% endif %}>
+                            <span class="text-gray-700">All Types</span>
                         </label>
-                    </div>
-                    {% for type_code, type_name in product_types %}
-                    <div class="form-check">
-                        <input class="form-check-input filter-checkbox" 
-                               type="checkbox" 
-                               name="type" 
-                               value="{{ type_code }}" 
-                               id="type{{ type_code }}"
-                               {% if selected_type == type_code %}checked{% endif %}>
-                        <label class="form-check-label" for="type{{ type_code }}">
-                            {{ type_name }}
+                        {% for type_code, type_name in product_types %}
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" 
+                                   class="form-checkbox h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500 filter-checkbox" 
+                                   name="type" 
+                                   value="{{ type_code }}" 
+                                   id="type{{ type_code }}"
+                                   {% if selected_type == type_code %}checked{% endif %}>
+                            <span class="text-gray-700">{{ type_name }}</span>
                         </label>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
 
-                <!-- Price Range (Optional) -->
-                <div class="filter-group">
-                    <h6><i class="fas fa-dollar-sign me-2"></i>Price Range</h6>
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <input type="number" 
-                                   name="min_price" 
-                                   class="form-control form-control-sm" 
-                                   placeholder="Min" 
-                                   id="minPrice"
-                                   value="{{ min_price|default:'' }}">
-                        </div>
-                        <div class="col-6">
-                            <input type="number" 
-                                   name="max_price" 
-                                   class="form-control form-control-sm" 
-                                   placeholder="Max"
-                                   id="maxPrice"
-                                   value="{{ max_price|default:'' }}">
-                        </div>
+                <!-- Price Range -->
+                <div class="mb-6">
+                    <h6 class="font-medium text-gray-700 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Price Range
+                    </h6>
+                    <div class="flex gap-2">
+                        <input type="number" 
+                               name="min_price" 
+                               class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent" 
+                               placeholder="Min" 
+                               id="minPrice"
+                               value="{{ min_price|default:'' }}">
+                        <input type="number" 
+                               name="max_price" 
+                               class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent" 
+                               placeholder="Max"
+                               id="maxPrice"
+                               value="{{ max_price|default:'' }}">
                     </div>
                 </div>
 
                 <!-- Availability -->
-                <div class="filter-group">
-                    <h6><i class="fas fa-check-circle me-2"></i>Availability</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" 
-                               type="checkbox" 
+                <div class="mb-6">
+                    <h6 class="font-medium text-gray-700 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Availability
+                    </h6>
+                    <label class="flex items-center space-x-3">
+                        <input type="checkbox" 
+                               class="form-checkbox h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500" 
                                name="in_stock" 
                                id="inStock"
                                {% if in_stock %}checked{% endif %}>
-                        <label class="form-check-label" for="inStock">
-                            In Stock Only
-                        </label>
-                    </div>
+                        <span class="text-gray-700">In Stock Only</span>
+                    </label>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="d-grid gap-2">
-                    <button type="button" class="btn btn-success" id="applyFilters">
-                        <i class="fas fa-filter me-2"></i>Apply Filters
+                <div class="space-y-2">
+                    <button type="button" 
+                            class="w-full px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                            id="applyFilters">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                        </svg>
+                        Apply Filters
                     </button>
-                    <a href="{% url 'product-list' %}" class="btn btn-outline-secondary">
-                        <i class="fas fa-redo me-2"></i>Clear Filters
+                    <a href="{% url 'product-list' %}" 
+                       class="block w-full px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors text-center">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        Clear Filters
                     </a>
                 </div>
             </div>
 
             <!-- Farmer Actions -->
             {% if user.is_authenticated and user.user_type == 'FARMER' %}
-            <div class="filter-sidebar mt-4">
-                <h4 class="filter-title">
-                    <i class="fas fa-tools me-2"></i>Farmer Tools
+            <div class="bg-white rounded-xl shadow-sm p-6 mt-4">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">
+                    <svg class="w-5 h-5 inline mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Farmer Tools
                 </h4>
-                <div class="d-grid">
-                    <a href="{% url 'add-product' %}" class="btn btn-success">
-                        <i class="fas fa-plus-circle me-2"></i>Add New Product
+                <div class="space-y-2">
+                    <a href="{% url 'add-product' %}" 
+                       class="block w-full px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors text-center">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Add New Product
                     </a>
-                    <a href="{% url 'dashboard' %}" class="btn btn-outline-success mt-2">
-                        <i class="fas fa-chart-line me-2"></i>View Dashboard
+                    <a href="{% url 'dashboard' %}" 
+                       class="block w-full px-4 py-2 border border-green-600 text-green-600 font-medium rounded-lg hover:bg-green-50 transition-colors text-center">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        View Dashboard
                     </a>
                 </div>
             </div>
@@ -300,22 +210,26 @@
         </div>
 
         <!-- Products Grid -->
-        <div class="col-lg-9">
+        <div class="lg:w-3/4">
             <!-- Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
                 <div>
-                    <h2 class="mb-1">🌱 Our Farm Products</h2>
-                    <p class="text-muted">
-                        <i class="fas fa-leaf me-1"></i>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-1">🌱 Our Farm Products</h2>
+                    <p class="text-gray-500 text-sm flex items-center">
+                        <svg class="w-4 h-4 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
                         Fresh from our farm to your table
                     </p>
                 </div>
-                <div class="d-flex align-items-center">
-                    <span class="text-muted me-2">
-                        <i class="fas fa-box me-1"></i>
+                <div class="flex items-center gap-3 mt-4 sm:mt-0">
+                    <span class="text-sm text-gray-500 flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
                         {{ products|length }} products
                     </span>
-                    <select class="form-select form-select-sm" id="sortSelect" style="width: auto;">
+                    <select class="form-select border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent py-2 px-3" id="sortSelect">
                         <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest</option>
                         <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
                         <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
@@ -326,142 +240,153 @@
 
             <!-- Active Filters -->
             {% if query or selected_category or selected_type or min_price or max_price or in_stock %}
-            <div class="alert alert-light border mb-4">
-                <i class="fas fa-filter me-2"></i>Active Filters:
-                {% if query %}
-                <span class="badge bg-light text-dark border me-2 p-2">
-                    Search: "{{ query }}" 
-                    <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_type %}type={{ selected_type }}&{% endif %}" 
-                       class="text-danger ms-1">×</a>
-                </span>
-                {% endif %}
-                {% if selected_category %}
-                {% for cat in categories %}
-                    {% if cat.id|stringformat:"s" == selected_category %}
-                    <span class="badge bg-light text-dark border me-2 p-2">
-                        Category: {{ cat.name }}
-                        <a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_type %}type={{ selected_type }}&{% endif %}" 
-                           class="text-danger ms-1">×</a>
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+                <div class="flex items-center flex-wrap gap-2">
+                    <span class="text-sm text-gray-600 mr-2">Active Filters:</span>
+                    {% if query %}
+                    <span class="inline-flex items-center px-3 py-1 bg-white border border-gray-300 rounded-full text-sm">
+                        Search: "{{ query }}"
+                        <a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_type %}type={{ selected_type }}&{% endif %}" 
+                           class="ml-2 text-gray-400 hover:text-red-500">×</a>
                     </span>
                     {% endif %}
-                {% endfor %}
-                {% endif %}
-                <a href="{% url 'product-list' %}" class="btn btn-sm btn-outline-danger">
-                    <i class="fas fa-times me-1"></i>Clear All
-                </a>
+                    {% if selected_category %}
+                    {% for cat in categories %}
+                        {% if cat.id|stringformat:"s" == selected_category %}
+                        <span class="inline-flex items-center px-3 py-1 bg-white border border-gray-300 rounded-full text-sm">
+                            Category: {{ cat.name }}
+                            <a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_type %}type={{ selected_type }}&{% endif %}" 
+                               class="ml-2 text-gray-400 hover:text-red-500">×</a>
+                        </span>
+                        {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    <a href="{% url 'product-list' %}" 
+                       class="ml-auto px-3 py-1 text-sm text-red-600 hover:text-red-700 font-medium">
+                        Clear All
+                    </a>
+                </div>
             </div>
             {% endif %}
 
             {% if products %}
-            <div class="row g-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {% for product in products %}
-                <div class="col-xl-4 col-md-6">
-                    <div class="card product-card">
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <!-- Product Badges -->
+                    <div class="flex justify-between p-3 pb-0">
+                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                            {{ product.get_product_type_display }}
+                        </span>
+                        
+                        {% if product.quantity > 10 %}
+                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">In Stock</span>
+                        {% elif product.quantity > 0 %}
+                        <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full">Low Stock</span>
+                        {% else %}
+                        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Out of Stock</span>
+                        {% endif %}
+                    </div>
 
-                        <div class=" " style="display: flex; justify-content: space-between; margin: 6px;">
-                            <!-- Product Badges -->
-                            <div class="product-type-badge">
-                                <span class="badge bg-success">
-                                    {{ product.get_product_type_display }}
-                                </span>
+                    <!-- Product Image -->
+                    <div class="h-48 overflow-hidden">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" 
+                             class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                             alt="{{ product.name }}">
+                        {% else %}
+                        <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="p-4">
+                        <h5 class="font-semibold text-gray-800 mb-1">
+                            <a href="{% url 'product-detail' product.pk %}" 
+                               class="hover:text-green-600 transition-colors">
+                                {{ product.name }}
+                            </a>
+                        </h5>
+                        
+                        <!-- Category -->
+                        <p class="text-xs text-gray-500 mb-2 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l5 5a2 2 0 01.586 1.414V19a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
+                            </svg>
+                            {{ product.category.name }}
+                        </p>
+
+                        <!-- Description -->
+                        <p class="text-sm text-gray-600 mb-3">
+                            {{ product.description|truncatechars:60 }}
+                        </p>
+
+                        <!-- Price and Unit -->
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <span class="text-xl font-bold text-green-600">KSh {{ product.price }}</span>
+                                <span class="text-xs text-gray-500">/{{ product.unit }}</span>
                             </div>
-                            
-                            <!-- Stock Badge -->
-                            <div class="product-badge">
-                                {% if product.quantity > 10 %}
-                                <span class="badge bg-success">In Stock</span>
-                                {% elif product.quantity > 0 %}
-                                <span class="badge bg-warning text-dark">Low Stock</span>
-                                {% else %}
-                                <span class="badge bg-danger">Out of Stock</span>
-                                {% endif %}
-                            </div>
+                            <span class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full">
+                                {{ product.quantity }} {{ product.unit }} left
+                            </span>
                         </div>
 
-                        <!-- Product Image -->
-                        <div class="product-img-wrapper">
-                            {% if product.image %}
-                            <img src="{{ product.image.url }}" 
-                                 class="product-img img-fluid"
-                                 style="width: 100%; height: 180px; object-fit: cover;"
-                                 alt="{{ product.name }}">
+                        <!-- Action Buttons -->
+                        <div class="space-y-2">
+                            {% if product.quantity > 0 %}
+                            <button class="w-full px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors add-to-cart" 
+                                    data-product-id="{{ product.id }}"
+                                    data-product-name="{{ product.name }}">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                Add to Cart
+                            </button>
                             {% else %}
-                            <img src="{% static 'images/default-product.jpg' %}"
-                                 class="product-img"
-                                 alt="{{ product.name }}">
+                            <button class="w-full px-4 py-2 bg-gray-300 text-gray-500 text-sm font-medium rounded-lg cursor-not-allowed" disabled>
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Out of Stock
+                            </button>
                             {% endif %}
-                        </div>
-
-                        <!-- Product Details -->
-                        <div class="card-body">
-                            <h5 class="card-title mb-1">
-                                <a href="{% url 'product-detail' product.pk %}" 
-                                   class="text-dark text-decoration-none">
-                                    {{ product.name }}
-                                </a>
-                            </h5>
                             
-                            <!-- Category -->
-                            <p class="text-muted small mb-2">
-                                <i class="fas fa-tag me-1"></i>{{ product.category.name }}
-                            </p>
-
-                            <!-- Description -->
-                            <p class="card-text text-muted small">
-                                {{ product.description|truncatechars:80 }}
-                            </p>
-
-                            <!-- Price and Unit -->
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <div>
-                                    <span class="product-price">KSh {{ product.price }}</span>
-                                    <span class="text-muted small">/{{ product.unit }}</span>
-                                </div>
-                                <span class="stock-status {% if product.quantity > 10 %}in-stock{% elif product.quantity > 0 %}low-stock{% else %}out-of-stock{% endif %}">
-                                    <i class="fas {% if product.quantity > 0 %}fa-check-circle{% else %}fa-times-circle{% endif %} me-1"></i>
-                                    {{ product.quantity }} {{ product.unit }} left
-                                </span>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="d-grid gap-2">
-                                {% if product.quantity > 0 %}
-                                <button class="btn btn-success add-to-cart" 
-                                        data-product-id="{{ product.id }}"
-                                        data-product-name="{{ product.name }}">
-                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
-                                </button>
-                                {% else %}
-                                <button class="btn btn-secondary" disabled>
-                                    <i class="fas fa-times-circle me-2"></i>Out of Stock
-                                </button>
-                                {% endif %}
+                            <div class="flex gap-2">
+                                <a href="{% url 'product-detail' product.pk %}" 
+                                   class="flex-1 px-4 py-2 border border-green-600 text-green-600 text-sm font-medium rounded-lg hover:bg-green-50 transition-colors text-center">
+                                    View Details
+                                </a>
                                 
-                                <div class="btn-group">
-                                    <a href="{% url 'product-detail' product.pk %}" 
-                                       class="btn btn-outline-success">
-                                        <i class="fas fa-eye me-2"></i>View Details
-                                    </a>
-                                    
-                                    {% if user.is_authenticated and user.user_type == 'FARMER' %}
-                                    <button type="button" 
-                                            class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" 
-                                            data-bs-toggle="dropdown">
+                                {% if user.is_authenticated and user.user_type == 'FARMER' %}
+                                <div class="relative group">
+                                    <button class="px-3 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
                                     </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" href="{% url 'update-product' product.pk %}">
-                                                <i class="fas fa-edit me-2"></i>Edit
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item text-danger" href="{% url 'delete-product' product.pk %}">
-                                                <i class="fas fa-trash me-2"></i>Delete
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    {% endif %}
+                                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden group-hover:block z-10">
+                                        <a href="{% url 'update-product' product.pk %}" 
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                            Edit
+                                        </a>
+                                        <a href="{% url 'delete-product' product.pk %}" 
+                                           class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                            Delete
+                                        </a>
+                                    </div>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -471,42 +396,61 @@
 
             <!-- Pagination -->
             {% if products.has_other_pages %}
-            <nav aria-label="Product pagination" class="mt-5">
-                <ul class="pagination justify-content-center">
+            <nav class="flex justify-center mt-8" aria-label="Pagination">
+                <ul class="flex items-center space-x-2">
                     {% if products.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" aria-label="First">
-                            <span aria-hidden="true">&laquo;&laquo;</span>
+                    <li>
+                        <a href="?page=1{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" 
+                           class="px-3 py-2 rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">First</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                            </svg>
                         </a>
                     </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ products.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
+                    <li>
+                        <a href="?page={{ products.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" 
+                           class="px-3 py-2 rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Previous</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
                         </a>
                     </li>
                     {% endif %}
 
                     {% for num in products.paginator.page_range %}
                         {% if products.number == num %}
-                        <li class="page-item active">
-                            <span class="page-link">{{ num }}</span>
+                        <li>
+                            <span class="px-4 py-2 rounded-lg bg-green-600 text-white font-medium">{{ num }}</span>
                         </li>
                         {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}">{{ num }}</a>
+                        <li>
+                            <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" 
+                               class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50">
+                                {{ num }}
+                            </a>
                         </li>
                         {% endif %}
                     {% endfor %}
 
                     {% if products.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ products.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
+                    <li>
+                        <a href="?page={{ products.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" 
+                           class="px-3 py-2 rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Next</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                            </svg>
                         </a>
                     </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ products.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" aria-label="Last">
-                            <span aria-hidden="true">&raquo;&raquo;</span>
+                    <li>
+                        <a href="?page={{ products.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" 
+                           class="px-3 py-2 rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Last</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                            </svg>
                         </a>
                     </li>
                     {% endif %}
@@ -516,20 +460,24 @@
 
             {% else %}
             <!-- No Products Found -->
-            <div class="text-center py-5">
-                <div class="mb-4">
-                    <i class="fas fa-box-open fa-4x text-muted"></i>
-                </div>
-                <h4 class="text-muted mb-3">No Products Found</h4>
-                <p class="text-muted mb-4">
+            <div class="text-center py-12 bg-white rounded-xl shadow-sm">
+                <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                </svg>
+                <h4 class="text-lg font-medium text-gray-800 mb-2">No Products Found</h4>
+                <p class="text-gray-500 mb-4">
                     {% if query or selected_category or selected_type %}
                     No products match your search criteria. Try adjusting your filters.
                     {% else %}
                     No products are available at the moment. Please check back later.
                     {% endif %}
                 </p>
-                <a href="{% url 'product-list' %}" class="btn btn-success">
-                    <i class="fas fa-redo me-2"></i>View All Products
+                <a href="{% url 'product-list' %}" 
+                   class="inline-flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    View All Products
                 </a>
             </div>
             {% endif %}
@@ -538,61 +486,74 @@
 </div>
 
 <!-- Quick Add to Cart Modal -->
-<div class="modal fade" id="cartModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-check-circle me-2"></i>
-                    Added to Cart
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+<div class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden items-center justify-center z-50" id="cartModal">
+    <div class="bg-white rounded-xl max-w-md w-full mx-4">
+        <div class="bg-green-600 text-white px-6 py-4 rounded-t-xl flex justify-between items-center">
+            <h5 class="text-lg font-semibold flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Added to Cart
+            </h5>
+            <button class="text-white hover:text-gray-200" onclick="closeModal()">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="px-6 py-8 text-center">
+            <div class="mb-4">
+                <svg class="w-16 h-16 mx-auto text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
             </div>
-            <div class="modal-body text-center py-4">
-                <div class="mb-3">
-                    <i class="fas fa-shopping-cart fa-3x text-success"></i>
-                </div>
-                <h5 id="modalProductName" class="mb-3"></h5>
-                <p class="text-muted">has been added to your cart</p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <a href="{% url 'cart-view' %}" class="btn btn-success">
-                    <i class="fas fa-shopping-cart me-2"></i>View Cart
-                </a>
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-arrow-left me-2"></i>Continue Shopping
-                </button>
-            </div>
+            <h5 id="modalProductName" class="text-lg font-semibold text-gray-800 mb-2"></h5>
+            <p class="text-gray-500">has been added to your cart</p>
+        </div>
+        <div class="px-6 py-4 bg-gray-50 rounded-b-xl flex gap-3 justify-center">
+            <a href="{% url 'cart-view' %}" 
+               class="px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors">
+                View Cart
+            </a>
+            <button onclick="closeModal()" 
+                    class="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                Continue Shopping
+            </button>
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
 <script>
+// Modal functions
+function openModal(productName) {
+    document.getElementById('modalProductName').textContent = productName;
+    document.getElementById('cartModal').classList.remove('hidden');
+    document.getElementById('cartModal').classList.add('flex');
+}
+
+function closeModal() {
+    document.getElementById('cartModal').classList.add('hidden');
+    document.getElementById('cartModal').classList.remove('flex');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Handle filter checkboxes
     const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
     filterCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             if (this.id === 'catAll' && this.checked) {
-                // Uncheck all category checkboxes
                 document.querySelectorAll('input[name="category"]').forEach(cb => {
                     if (cb.id !== 'catAll') cb.checked = false;
                 });
             } else if (this.name === 'category' && this.checked) {
-                // Uncheck "All Categories" if any category is selected
                 document.getElementById('catAll').checked = false;
             }
             
             if (this.id === 'typeAll' && this.checked) {
-                // Uncheck all type checkboxes
                 document.querySelectorAll('input[name="type"]').forEach(cb => {
                     if (cb.id !== 'typeAll') cb.checked = false;
                 });
             } else if (this.name === 'type' && this.checked) {
-                // Uncheck "All Types" if any type is selected
                 document.getElementById('typeAll').checked = false;
             }
         });
@@ -603,39 +564,33 @@ document.addEventListener('DOMContentLoaded', function() {
         let url = new URL(window.location.href);
         let params = new URLSearchParams(url.search);
         
-        // Clear existing params
         params.delete('category');
         params.delete('type');
         params.delete('min_price');
         params.delete('max_price');
         params.delete('in_stock');
         
-        // Add selected categories
         document.querySelectorAll('input[name="category"]:checked').forEach(cb => {
             if (cb.value) {
                 params.append('category', cb.value);
             }
         });
         
-        // Add selected types
         document.querySelectorAll('input[name="type"]:checked').forEach(cb => {
             if (cb.value) {
                 params.append('type', cb.value);
             }
         });
         
-        // Add price range
         const minPrice = document.getElementById('minPrice').value;
         const maxPrice = document.getElementById('maxPrice').value;
         if (minPrice) params.set('min_price', minPrice);
         if (maxPrice) params.set('max_price', maxPrice);
         
-        // Add in stock filter
         if (document.getElementById('inStock').checked) {
             params.set('in_stock', 'true');
         }
         
-        // Add search query if exists
         const searchInput = document.querySelector('input[name="q"]');
         if (searchInput.value) {
             params.set('q', searchInput.value);
@@ -667,11 +622,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.message) {
-                    // Show success modal
-                    document.getElementById('modalProductName').textContent = productName;
-                    new bootstrap.Modal(document.getElementById('cartModal')).show();
+                    openModal(productName);
                     
-                    // Update cart count in navbar
                     const cartCount = document.querySelector('.cart-count');
                     if (cartCount) {
                         cartCount.textContent = data.cart_count;

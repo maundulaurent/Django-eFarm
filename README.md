@@ -10,7 +10,7 @@
 | | |
 |:---:|:---:|
 | **Homepage** | **Mobile View** |
-| ![alt text](image.png) | <!-- 📸 SCREENSHOT: Mobile hamburger menu --> |
+| ![alt text](image.png) | ![alt text](image-1.png) |
 | *Clean, welcoming interface with farm theme* | *Responsive design on mobile devices* |
 
 ### **Authentication System**

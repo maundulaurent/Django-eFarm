@@ -87,10 +87,10 @@
 #         print("*" * (2 * i - 1))
 # full_pyramid(5)
 
-for i in range(8, 0 , -1):
-    print("*" * i)
 
-def inverted_pyramid(rows):
-    for i in range(rows, 0 , -1):
-        print(" " * (rows ))
+
+# def inverted_pyramid(rows):
+#     for i in range(rows, 0 , -1):
+#         print(" " * (rows ))
+            # not finished
         

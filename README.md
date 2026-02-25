@@ -1,6 +1,5 @@
 
 <!-- 📸 SCREENSHOT: Project structure showing all apps -->
-
 ---
 
 ## 📸 Shamba Farm System
@@ -10,7 +9,7 @@
 | | |
 |:---:|:---:|
 | **Homepage** | **Mobile View** |
-| ![alt text](image.png) | ![alt text](image-1.png) |
+| ![alt text](media/readme/image.png) | ![alt text](media/readme/image-1.png) |
 | *Clean, welcoming interface with farm theme* | *Responsive design on mobile devices* |
 
 ### **Authentication System**
@@ -110,7 +109,7 @@
 ## 📦 Installation Guide
 
 ### **Prerequisites**
-- Python 3.10+
+- Python 3.9+
 - PostgreSQL 17+
 - Git
 - Virtual Environment (recommended)

@@ -3,14 +3,14 @@
 
 ---
 
-## 📸 Screenshots
+## 📸 Shamba Farm System
 
 ### **Homepage & Navigation**
 
 | | |
 |:---:|:---:|
 | **Homepage** | **Mobile View** |
-| <!-- 📸 SCREENSHOT: Homepage with hero section --> | <!-- 📸 SCREENSHOT: Mobile hamburger menu --> |
+| ![alt text](image.png) | <!-- 📸 SCREENSHOT: Mobile hamburger menu --> |
 | *Clean, welcoming interface with farm theme* | *Responsive design on mobile devices* |
 
 ### **Authentication System**

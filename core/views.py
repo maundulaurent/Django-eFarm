@@ -4,7 +4,7 @@ from django.db.models import Count, Sum
 from django.utils import timezone
 from datetime import timedelta
 from inventory.models import Product, Category
-from livestock.models import Livestock
+from livestock.models import Livestock, AnimalType
 from sales.models import Order
 from blog.models import Article
 from services.models import Service
@@ -65,27 +65,16 @@ def about(request):
 def contact(request):
     return render(request, 'core/contact.html')
 
-
-# inventory_category = Category.objects.order_by('?').first()
-#     recent_products = Product.objects.filter(is_available=True)[:6]
-#     recent_articles = Article.objects.filter(is_published=True)[:3]
-#     services = Service.objects.filter(is_available=True)[:4]
-    
-#     context = {
-#         'inventory_category' : inventory_category,
-#         'recent_products': recent_products,
-#         'recent_articles': recent_articles,
-#         'services': services,
-#     }
-
 def our_collections(request):
     inventory_categories = Category.objects.all()
     inventory_products = Product.objects.all()
     livestock = Livestock.objects.all()
+    livestock_categories = AnimalType.objects.all()
     services = Service.objects.all()
     context = {
         'inventory_categories' : inventory_categories,
         'inventory_products' : inventory_products,
+        'livestock_categories' : livestock_categories,
         'livestock' : livestock,
         'services'  : services,
     }

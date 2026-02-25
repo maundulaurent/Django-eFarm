@@ -81,3 +81,16 @@
 #         print(j, end=" ")
 #     print()
 
+# def full_pyramid(rows):
+#     for i in range(1, rows + 1):
+#         print(" " * (rows - i), end=" ")
+#         print("*" * (2 * i - 1))
+# full_pyramid(5)
+
+for i in range(8, 0 , -1):
+    print("*" * i)
+
+def inverted_pyramid(rows):
+    for i in range(rows, 0 , -1):
+        print(" " * (rows ))
+        

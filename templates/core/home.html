@@ -4,77 +4,77 @@
 
 
 <!-- Hero Section with Background Image -->
-    <div class="relative overflow-hidden bg-white">
-        <!-- Background Image -->
-        <div class="absolute inset-0">
-            <img 
-                src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2832&q=80" 
-                alt="Beautiful farm landscape" 
-                class="w-full h-full object-cover"
-            >
-            <!-- Dark overlay for text readability -->
-            <div class="absolute inset-0 bg-black/40"></div>
-        </div>
-        
-        <!-- Simple background pattern (now sits on top of image but behind text) -->
-        <div class="absolute inset-0">
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-green-50/20 rounded-full opacity-50"></div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-green-50/20 rounded-full opacity-50"></div>
-        </div>
-        
-        <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
-            <div class="text-center text-white">
-                <!-- Farm icon or simple badge -->
-                <div class="inline-flex items-center justify-center mb-6">
-                    <span class="text-5xl">🌱</span>
-                </div>
-                
-                <!-- Main headline -->
-                <h1 class="text-4xl md:text-5xl font-light mb-4 tracking-tight">
-                    Welcome to <span class="font-medium text-green-300">CSHAMBA Farm</span>
-                </h1>
-                
-                <!-- Simple description -->
-                <p class="text-xl text-gray-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-                    Fresh produce, quality livestock, and expert advice — straight from our family farm to your table.
-                </p>
-                
-                <!-- Clean CTA buttons -->
-                <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                    <a href="{% url 'our-collections' %}"
-                    class="w-full sm:w-auto px-8 py-3 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                        Browse Collections
-                    </a>
-                    <a href="{% url 'article-list' %}" 
-                    class="w-full sm:w-auto px-8 py-3 border border-white text-white text-sm font-medium rounded-md hover:bg-white hover:text-gray-900 transition-colors">
-                        Read Blog
-                    </a>
-                </div>
-                
-                <!-- Simple stats or trust indicators -->
-                <div class="mt-12 pt-8 border-t border-white/20">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-                        <div>
-                            <div class="text-2xl font-medium text-green-300">20+</div>
-                            <div class="text-xs text-gray-200 uppercase tracking-wider">Years</div>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-medium text-green-300">100%</div>
-                            <div class="text-xs text-gray-200 uppercase tracking-wider">Organic</div>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-medium text-green-300">50+</div>
-                            <div class="text-xs text-gray-200 uppercase tracking-wider">Products</div>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-medium text-green-300">4.9</div>
-                            <div class="text-xs text-gray-200 uppercase tracking-wider">Rating</div>
-                        </div>
+<div class="relative overflow-hidden bg-white">
+    <!-- Background Image -->
+    <div class="absolute inset-0">
+        <img 
+            src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2832&q=80" 
+            alt="Beautiful farm landscape" 
+            class="w-full h-full object-cover"
+        >
+        <!-- Dark overlay for text readability -->
+        <div class="absolute inset-0 bg-black/40"></div>
+    </div>
+    
+    <!-- Simple background pattern (now sits on top of image but behind text) -->
+    <div class="absolute inset-0">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-green-50/20 rounded-full opacity-50"></div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-green-50/20 rounded-full opacity-50"></div>
+    </div>
+    
+    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+        <div class="text-center text-white">
+            <!-- Farm icon or simple badge -->
+            <div class="inline-flex items-center justify-center mb-6">
+                <span class="text-5xl">🌱</span>
+            </div>
+            
+            <!-- Main headline -->
+            <h1 class="text-4xl md:text-5xl font-light mb-4 tracking-tight">
+                Welcome to <span class="font-medium text-green-300">eSHAMBA Farm</span>
+            </h1>
+            
+            <!-- Simple description -->
+            <p class="text-xl text-gray-100 max-w-2xl mx-auto mb-8 leading-relaxed">
+                Fresh produce, quality livestock, and expert advice — straight from our family farm to your table.
+            </p>
+            
+            <!-- Clean CTA buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                <a href="{% url 'our-collections' %}"
+                class="w-full sm:w-auto px-8 py-3 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    Browse Collections
+                </a>
+                <a href="{% url 'article-list' %}" 
+                class="w-full sm:w-auto px-8 py-3 border border-white text-white text-sm font-medium rounded-md hover:bg-white hover:text-gray-900 transition-colors">
+                    Read Blog
+                </a>
+            </div>
+            
+            <!-- Simple stats or trust indicators -->
+            <div class="mt-12 pt-8 border-t border-white/20">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+                    <div>
+                        <div class="text-2xl font-medium text-green-300">20+</div>
+                        <div class="text-xs text-gray-200 uppercase tracking-wider">Years</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-medium text-green-300">100%</div>
+                        <div class="text-xs text-gray-200 uppercase tracking-wider">Organic</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-medium text-green-300">50+</div>
+                        <div class="text-xs text-gray-200 uppercase tracking-wider">Products</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-medium text-green-300">4.9</div>
+                        <div class="text-xs text-gray-200 uppercase tracking-wider">Rating</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 <!-- Features Section -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 mt-8 max-w-7xl mx-auto">

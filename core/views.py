@@ -70,12 +70,27 @@ def our_collections(request):
     inventory_products = Product.objects.all()
     livestock = Livestock.objects.all()
     livestock_categories = AnimalType.objects.all()
+    
+    # Get livestock grouped by category with random breeds
+    category_livestock = []
+    for category in livestock_categories:
+        livestock_in_category = Livestock.objects.filter(animal_type=category)
+        count = livestock_in_category.count()
+        # Get 4 random breeds (distinct) from this category
+        random_breeds = livestock_in_category.values_list('breed', flat=True).distinct()[:4]
+        category_livestock.append({
+            'category': category,
+            'count': count,
+            'random_breeds': list(random_breeds)
+        })
+    
     services = Service.objects.all()
     context = {
-        'inventory_categories' : inventory_categories,
-        'inventory_products' : inventory_products,
-        'livestock_categories' : livestock_categories,
-        'livestock' : livestock,
-        'services'  : services,
+        'inventory_categories': inventory_categories,
+        'inventory_products': inventory_products,
+        'livestock_categories': livestock_categories,
+        'livestock': livestock,
+        'category_livestock': category_livestock,
+        'services': services,
     }
     return render(request, 'core/collections.html', context)

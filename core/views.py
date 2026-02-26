@@ -70,6 +70,7 @@ def our_collections(request):
     inventory_products = Product.objects.all()
     livestock = Livestock.objects.all()
     livestock_categories = AnimalType.objects.all()
+    services = Service.objects.all()
     
     # Get livestock grouped by category with random breeds
     category_livestock = []
@@ -84,7 +85,6 @@ def our_collections(request):
             'random_breeds': list(random_breeds)
         })
     
-    services = Service.objects.all()
     context = {
         'inventory_categories': inventory_categories,
         'inventory_products': inventory_products,

@@ -7,7 +7,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display = ['title', 'service_type', 'price', 'duration', 'is_available']
     list_filter = ['service_type', 'is_available']
     search_fields = ['title', 'description']
-    list_editable = ['price', 'is_available']
+    list_editable = ['price', 'is_available', 'service_type']
     
     fieldsets = (
         ('Service Details', {

@@ -6,15 +6,16 @@ from django.conf import settings
 User = get_user_model()
 
 class Service(models.Model):
-    SERVICE_TYPES = [
-        ('COACHING', 'Farming Coaching'),
-        ('CONSULTATION', 'Consultation'),
-        ('WORKSHOP', 'Workshop'),
-        ('TOUR', 'Farm Tour'),
-    ]
+    # SERVICE_TYPES = [
+    #     ('COACHING', 'Farming Coaching'),
+    #     ('CONSULTATION', 'Consultation'),
+    #     ('WORKSHOP', 'Workshop'),
+    #     ('TOUR', 'Farm Tour'),
+    # ]
     
     title = models.CharField(max_length=200)
-    service_type = models.CharField(max_length=20, choices=SERVICE_TYPES)
+    # service_type = models.CharField(max_length=20, choices=SERVICE_TYPES)
+    service_type = models.CharField(max_length=20)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     duration = models.CharField(max_length=50)  # e.g., "2 hours", "1 day"

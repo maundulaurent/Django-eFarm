@@ -78,19 +78,31 @@ def our_collections(request):
         livestock_in_category = Livestock.objects.filter(animal_type=category)
         count = livestock_in_category.count()
         # Get 4 random breeds (distinct) from this category
-        random_breeds = livestock_in_category.values_list('breed', flat=True).distinct()[:4]
+        random_breeds = livestock_in_category.values_list('breed', flat=True).distinct().order_by('?')
         category_livestock.append({
             'category': category,
             'count': count,
             'random_breeds': list(random_breeds)
         })
+
+    category_inventory = []
+    for category in inventory_categories:
+        products_in_category = Product.objects.filter(category = category)
+        count = products_in_category.count()
+        random_products = products_in_category.values_list('name', flat=True).distinct().order_by('?')
+        category_inventory.append({
+            'category' : category,
+            'count' : count,
+            'random_products' : list(random_products)
+        })
     
     context = {
-        'inventory_categories': inventory_categories,
-        'inventory_products': inventory_products,
-        'livestock_categories': livestock_categories,
-        'livestock': livestock,
+        # 'inventory_categories': inventory_categories,
+        # 'inventory_products': inventory_products,
+        # 'livestock_categories': livestock_categories,
+        # 'livestock': livestock,
         'category_livestock': category_livestock,
+        'category_inventory' : category_inventory,
         'services': services,
     }
     return render(request, 'core/collections.html', context)

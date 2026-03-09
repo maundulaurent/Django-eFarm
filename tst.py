@@ -1,3 +1,7 @@
+# Programs.
+# Small snippets for brain warming
+
+
 # def Pyramid():
 #     # rows = int(input("Enter the number of rows: "))
 #     rows = 8

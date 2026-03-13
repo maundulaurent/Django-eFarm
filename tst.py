@@ -1,6 +1,4 @@
 # Programs.
-# Small snippets
-# pythn  
 
 
 # def Pyramid():
